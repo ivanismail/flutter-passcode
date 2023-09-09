@@ -31,6 +31,9 @@ class PasscodeScreen extends StatefulWidget {
   final Widget? bottomWidget;
   final List<String>? digits;
 
+  final bool useGradient;
+  final Gradient? gradient;
+
   PasscodeScreen({
     Key? key,
     required this.title,
@@ -46,6 +49,8 @@ class PasscodeScreen extends StatefulWidget {
     this.backgroundColor,
     this.cancelCallback,
     this.digits,
+    this.gradient,
+    this.useGradient = false,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
         super(key: key);
@@ -91,6 +96,18 @@ class _PasscodeScreenState extends State<PasscodeScreen>
     return Scaffold(
       backgroundColor: widget.backgroundColor ?? Colors.black.withOpacity(0.8),
       body: SafeArea(
+          child: Container(
+        decoration: BoxDecoration(
+            gradient: widget.useGradient == true
+                ? widget.gradient
+                : LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      widget.backgroundColor ?? Colors.black.withOpacity(0.8),
+                      widget.backgroundColor ?? Colors.black.withOpacity(0.8),
+                    ],
+                  )),
         child: OrientationBuilder(
           builder: (context, orientation) {
             return orientation == Orientation.portrait
@@ -98,7 +115,7 @@ class _PasscodeScreenState extends State<PasscodeScreen>
                 : _buildLandscapePasscodeScreen();
           },
         ),
-      ),
+      )),
     );
   }
 
@@ -124,12 +141,12 @@ class _PasscodeScreenState extends State<PasscodeScreen>
               ),
             ),
           ),
-          Positioned(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: _buildDeleteButton(),
-            ),
-          ),
+          // Positioned(
+          //   child: Align(
+          //     alignment: Alignment.bottomRight,
+          //     child: _buildDeleteButton(),
+          //   ),
+          // )
         ],
       );
 
@@ -189,10 +206,22 @@ class _PasscodeScreenState extends State<PasscodeScreen>
       );
 
   _buildKeyboard() => Container(
-        child: Keyboard(
-          onKeyboardTap: _onKeyboardButtonPressed,
-          keyboardUIConfig: widget.keyboardUIConfig,
-          digits: widget.digits,
+        height: MediaQuery.of(context).size.height / 2,
+        width: MediaQuery.of(context).size.height * 0.7,
+        child: Stack(
+          children: [
+            Center(
+                child: Keyboard(
+              onKeyboardTap: _onKeyboardButtonPressed,
+              keyboardUIConfig: widget.keyboardUIConfig,
+              digits: widget.digits,
+            )),
+            Positioned(
+              bottom: -6,
+              right: 42,
+              child: _buildDeleteButton(),
+            )
+          ],
         ),
       );
 

@@ -60,15 +60,15 @@ class Keyboard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final keyboardHeight = screenSize.height > screenSize.width
         ? screenSize.height / 2
-        : screenSize.height - 80;
-    final keyboardWidth = keyboardHeight * 3 / 4;
+        : screenSize.height - 100;
+    final keyboardWidth = keyboardHeight * 0.7;
     final keyboardSize = this.keyboardUIConfig.keyboardSize != null
         ? this.keyboardUIConfig.keyboardSize!
         : Size(keyboardWidth, keyboardHeight);
     return Container(
       width: keyboardSize.width,
       height: keyboardSize.height,
-      margin: EdgeInsets.only(top: 16),
+      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
       child: RawKeyboardListener(
         focusNode: _focusNode,
         autofocus: true,
@@ -78,7 +78,8 @@ class Keyboard extends StatelessWidget {
               onKeyboardTap(event.logicalKey.keyLabel);
               return;
             }
-            if (event.logicalKey.keyLabel== 'Backspace' || event.logicalKey.keyLabel == 'Delete') {
+            if (event.logicalKey.keyLabel == 'Backspace' ||
+                event.logicalKey.keyLabel == 'Delete') {
               onKeyboardTap(Keyboard.deleteButton);
               return;
             }
@@ -96,7 +97,7 @@ class Keyboard extends StatelessWidget {
 
   Widget _buildKeyboardDigit(String text) {
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: EdgeInsets.all(8),
       child: ClipOval(
         child: Material(
           color: Colors.transparent,
